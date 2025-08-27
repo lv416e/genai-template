@@ -1,25 +1,8 @@
 {
-  "name": "Modern Agentic Development Environment (Optimized)",
-  "image": "ghcr.io/lv416e/genai-template-devcontainer:latest",
-
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": true,
-      "configureZshAsDefaultShell": true,
-      "installOhMyZsh": true,
-      "upgradePackages": false,
-      "username": "vscode",
-      "userUid": "automatic",
-      "userGid": "automatic"
-    },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "moby": true,
-      "azureDnsAutoDetection": true,
-      "installDockerBuildx": true,
-      "version": "latest"
-    }
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/${localWorkspaceFolderBasename}",
+    "TERM": "xterm-256color"
   },
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -44,20 +27,23 @@
         "ms-vscode.hexeditor"
       ],
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "zsh",
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "python.terminal.activateEnvironment": false,
-        "ruff.lint.enable": true,
-        "ruff.format.enable": true,
-        "ruff.lint.args": ["--line-length=120"],
-        "ruff.format.args": ["--line-length=120"],
         "[python]": {
-          "editor.formatOnSave": true,
           "editor.codeActionsOnSave": {
             "source.fixAll.ruff": "explicit",
             "source.organizeImports.ruff": "explicit"
           },
-          "editor.defaultFormatter": "charliermarsh.ruff"
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true
+        },
+        "editor.rulers": [
+          120
+        ],
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.wordWrapColumn": 120,
+        "files.associations": {
+          "*.toml": "toml",
+          ".tool-versions": "properties",
+          "mise.toml": "toml"
         },
         "mypy-type-checker.args": [
           "--ignore-missing-imports",
@@ -65,40 +51,57 @@
           "--show-column-numbers",
           "--no-pretty"
         ],
-        "files.associations": {
-          "*.toml": "toml",
-          "mise.toml": "toml",
-          ".tool-versions": "properties"
-        },
-        "editor.rulers": [120],
-        "editor.wordWrap": "wordWrapColumn",
-        "editor.wordWrapColumn": 120
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.terminal.activateEnvironment": false,
+        "ruff.format.args": [
+          "--line-length=120"
+        ],
+        "ruff.format.enable": true,
+        "ruff.lint.args": [
+          "--line-length=120"
+        ],
+        "ruff.lint.enable": true,
+        "terminal.integrated.defaultProfile.linux": "zsh"
       }
     }
   },
-
-  "containerEnv": {
-    "PYTHONPATH": "/workspaces/${localWorkspaceFolderBasename}",
-    "TERM": "xterm-256color"
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installZsh": true,
+      "upgradePackages": false,
+      "userGid": "automatic",
+      "userUid": "automatic",
+      "username": "vscode"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "azureDnsAutoDetection": true,
+      "installDockerBuildx": true,
+      "moby": true,
+      "version": "latest"
+    }
   },
-
-  "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin:/home/vscode/.cargo/bin"
-  },
-
+  "forwardPorts": [
+    3000,
+    8000,
+    8080,
+    5000,
+    8888
+  ],
+  "image": "ghcr.io/lv416e/genai-template-devcontainer:latest",
   "mounts": [
     "source=vscode-server-extensions,target=/home/vscode/.vscode-server/extensions,type=volume",
     "source=${localWorkspaceFolder}/.devcontainer/scripts,target=/tmp/scripts,type=bind"
   ],
-
-  "postCreateCommand": "bash /tmp/scripts/setup-light.sh",
-
-  "remoteUser": "vscode",
-
-  "forwardPorts": [3000, 8000, 8080, 5000, 8888],
+  "name": "Modern Agentic Development Environment (Optimized)",
   "portsAttributes": {
     "3000": {
       "label": "Frontend Dev Server",
+      "onAutoForward": "notify"
+    },
+    "5000": {
+      "label": "Flask/FastAPI Server",
       "onAutoForward": "notify"
     },
     "8000": {
@@ -109,18 +112,17 @@
       "label": "Alternative Web Server",
       "onAutoForward": "notify"
     },
-    "5000": {
-      "label": "Flask/FastAPI Server",
-      "onAutoForward": "notify"
-    },
     "8888": {
       "label": "Jupyter Server",
       "onAutoForward": "ignore"
     }
   },
-
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
+  "postCreateCommand": "bash /tmp/scripts/setup-light.sh",
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin:/home/vscode/.cargo/bin"
+  },
+  "remoteUser": "vscode",
+  "shutdownAction": "stopContainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-
-  "shutdownAction": "stopContainer"
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind"
 }
