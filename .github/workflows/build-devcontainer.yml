@@ -4,14 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - ".devcontainer/Dockerfile.optimized"
+      - ".devcontainer/Dockerfile"
       - ".devcontainer/scripts/**"
       - ".github/workflows/build-devcontainer.yml"
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
     paths:
-      - ".devcontainer/Dockerfile.optimized"
+      - ".devcontainer/Dockerfile"
       - ".devcontainer/scripts/**"
       - ".github/workflows/build-devcontainer.yml"
   workflow_dispatch:
@@ -61,7 +61,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: .devcontainer/Dockerfile.optimized
+          file: .devcontainer/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
