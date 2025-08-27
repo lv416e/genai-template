@@ -49,9 +49,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest
             type=raw,value={{date 'YYYY-MM-DD'}},enable={{is_default_branch}}
-            type=sha,prefix=sha-,enable={{is_default_branch}}
+            type=sha,prefix=sha-
             type=ref,event=branch
             type=ref,event=pr
 
