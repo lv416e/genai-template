@@ -1,0 +1,94 @@
+# Mise configuration for GenAI development environment
+# This file manages development tools and environment variables
+
+[tools]
+# Python - using latest stable 3.12.x
+python = "3.12"
+
+# Node.js - using LTS version for JavaScript/TypeScript development
+node = "lts"
+
+# Go - for potential Go-based tools and services
+go = "1.22"
+
+# Rust - for modern tooling (required for some Python tools)
+rust = "1.80"
+
+# Additional development tools
+# shellcheck = "latest"  # Shell script linting
+# terraform = "latest"   # Infrastructure as code
+# kubectl = "latest"     # Kubernetes CLI
+
+[env]
+# Python development environment
+PYTHONPATH = "./src:./lib"
+PYTHONDONTWRITEBYTECODE = "1"
+PYTHONUNBUFFERED = "1"
+
+# Development environment settings
+ENVIRONMENT = "development"
+DEBUG = "1"
+
+# Locale settings
+LANG = "en_US.UTF-8"
+LC_ALL = "en_US.UTF-8"
+
+# Editor and tool preferences
+EDITOR = "code"
+VISUAL = "code"
+
+# UV (Python package manager) configuration
+UV_CACHE_DIR = "./.uv-cache"
+UV_PYTHON_PREFERENCE = "managed"
+
+# Ruff configuration
+RUFF_CACHE_DIR = "./.ruff_cache"
+
+# Node.js environment
+NODE_ENV = "development"
+
+[tasks]
+# Python development tasks
+py-setup = "uv sync --dev"
+py-install = "uv add"
+py-install-dev = "uv add --dev"
+py-run = "uv run"
+py-shell = "uv run python"
+
+# Code quality and formatting
+lint = "uv run ruff check ."
+format = "uv run ruff format ."
+type-check = "uv run mypy ."
+fix = "uv run ruff check --fix ."
+
+# Testing
+test = "uv run pytest"
+test-watch = "uv run pytest-watch"
+test-cov = "uv run pytest --cov=."
+
+# Project management
+clean = "find . -type d -name '__pycache__' -exec rm -rf {} + && find . -name '*.pyc' -delete"
+deps = "uv tree"
+outdated = "uv tree --outdated"
+
+# Claude Code integration
+cc-setup = "npx cc-sdd@latest --lang ja --dry-run"
+cc-init = "npx cc-sdd@latest --lang ja"
+
+# Git helpers
+git-setup = "git config --local core.autocrlf false && git config --local core.eol lf"
+
+# Development server tasks (customize based on your project needs)
+dev = "echo 'Configure your development server command here'"
+build = "echo 'Configure your build command here'"
+start = "echo 'Configure your start command here'"
+
+[alias]
+# Short aliases for common tasks
+i = "py-install"
+id = "py-install-dev"
+r = "py-run"
+l = "lint"
+f = "format"
+t = "test"
+c = "clean"
