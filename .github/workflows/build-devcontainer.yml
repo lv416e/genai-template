@@ -43,15 +43,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Delete all old versions to save costs
-        continue-on-error: true
-        uses: actions/delete-package-versions@v5
-        with:
-          package-name: "genai-template-devcontainer"
-          package-type: "container"
-          min-versions-to-keep: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -88,3 +79,14 @@ jobs:
       - name: Image digest
         run: |
           echo "Image digest: ${{ steps.build.outputs.digest }}"
+
+      - name: Delete old untagged versions only (after successful build)
+        if: success()
+        continue-on-error: true
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: "genai-template-devcontainer"
+          package-type: "container"
+          min-versions-to-keep: 1
+          delete-only-untagged-versions: true
+          token: ${{ secrets.GITHUB_TOKEN }}
