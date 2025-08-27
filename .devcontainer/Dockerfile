@@ -1,17 +1,29 @@
-# Optional custom Dockerfile for the devcontainer
-# This is not required if using the base image with features,
-# but provided as an alternative for more control
+# Optimized Dockerfile for Agentic Template Repository
+# Designed for fast launches via pre-built images
 
 FROM mcr.microsoft.com/devcontainers/base:debian-12
 
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install additional system dependencies
-RUN apt-get update && apt-get install -y \
+# Set locale environment early
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# Layer 1: System packages and locale setup (rarely changes)
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     # Build essentials
     build-essential \
     pkg-config \
+    curl \
+    wget \
+    unzip \
+    git \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    software-properties-common \
+    apt-transport-https \
     # SSL and crypto libraries
     libssl-dev \
     libffi-dev \
@@ -38,36 +50,46 @@ RUN apt-get update && apt-get install -y \
     && locale-gen en_US.UTF-8 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set locale environment
-ENV LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8
+# Layer 2: Git configuration (security)
+RUN git config --global --add safe.directory /workspaces/*
 
-# Switch to vscode user
+# Switch to vscode user for tool installations
 USER vscode
 
-# Install mise (modern runtime manager)
-RUN curl https://mise.run | sh
+# Layer 3: mise installation (modern runtime manager)
+RUN curl -fsSL https://mise.run | sh && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && \
+    echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc && \
+    echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
 
-# Install uv (Python package manager)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# Layer 4: uv installation (Python package manager)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.zshrc
 
-# Add mise and uv to PATH
+# Add mise and uv to PATH for subsequent layers
 ENV PATH="/home/vscode/.local/bin:/home/vscode/.cargo/bin:${PATH}"
 
-# Install default tool versions
-RUN eval "$(~/.local/bin/mise activate bash)" && \
-    ~/.local/bin/mise install python@3.12 && \
-    ~/.local/bin/mise install node@lts && \
-    ~/.local/bin/mise global python@3.12 node@lts
+# Layer 5: Core runtime installations via mise
+RUN eval "$($HOME/.local/bin/mise activate bash)" && \
+    $HOME/.local/bin/mise install python@3.12 && \
+    $HOME/.local/bin/mise install node@lts && \
+    $HOME/.local/bin/mise global python@3.12 node@lts
 
-# Setup shell configuration
-RUN echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc && \
-    echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc && \
-    echo 'export PATH="/home/vscode/.cargo/bin:$PATH"' >> ~/.bashrc && \
-    echo 'export PATH="/home/vscode/.cargo/bin:$PATH"' >> ~/.zshrc
+# Layer 6: Claude Code tool installation (requires Node.js)
+RUN eval "$($HOME/.local/bin/mise activate bash)" && \
+    npm install -g cc-sdd@latest
 
 # Set working directory
 WORKDIR /workspaces
 
 # Reset to default frontend
 ENV DEBIAN_FRONTEND=dialog
+
+# Set environment variables for runtime
+ENV PYTHONPATH="/workspaces" \
+    TERM="xterm-256color"
+
+# Expose common development ports
+EXPOSE 3000 8000 8080 5000 8888
