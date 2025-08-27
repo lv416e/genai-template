@@ -89,8 +89,7 @@
     5000,
     8888
   ],
-  "image": "ghcr.io/lv416e/genai-template-devcontainer:sha-992b659",
-  "initializeCommand": "docker pull ghcr.io/lv416e/genai-template-devcontainer:sha-992b659",
+  "image": "ghcr.io/lv416e/genai-template-devcontainer:main",
   "mounts": [
     "source=vscode-server-extensions,target=/home/vscode/.vscode-server/extensions,type=volume",
     "source=${localWorkspaceFolder}/.devcontainer/scripts,target=/tmp/scripts,type=bind"
@@ -118,7 +117,7 @@
       "onAutoForward": "ignore"
     }
   },
-  "postCreateCommand": "bash /tmp/scripts/setup-light.sh",
+  "postCreateCommand": "bash /tmp/scripts/setup.sh",
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin:/home/vscode/.cargo/bin"
   },
