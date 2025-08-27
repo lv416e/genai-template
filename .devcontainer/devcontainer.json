@@ -1,4 +1,12 @@
 {
+  "build": {
+    "cacheFrom": [
+      "type=registry,ref=ghcr.io/lv416e/genai-template-devcontainer:buildcache",
+      "type=registry,ref=ghcr.io/lv416e/genai-template-devcontainer:latest"
+    ],
+    "context": ".",
+    "dockerfile": "Dockerfile"
+  },
   "containerEnv": {
     "PYTHONPATH": "/workspaces/${localWorkspaceFolderBasename}",
     "TERM": "xterm-256color"
@@ -89,7 +97,6 @@
     5000,
     8888
   ],
-  "image": "ghcr.io/lv416e/genai-template-devcontainer:latest",
   "mounts": [
     "source=vscode-server-extensions,target=/home/vscode/.vscode-server/extensions,type=volume",
     "source=${localWorkspaceFolder}/.devcontainer/scripts,target=/tmp/scripts,type=bind"
