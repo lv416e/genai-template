@@ -21,6 +21,10 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: genai-template-devcontainer
 
+concurrency:
+  group: build-devcontainer
+  cancel-in-progress: true
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -57,9 +61,16 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value={{date 'YYYY-MM-DD'}},enable={{is_default_branch}}
             type=sha,prefix=sha-,enable={{is_default_branch}}
+            type=ref,event=branch
+            type=ref,event=pr
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Debug metadata outputs
+        run: |
+          echo "Tags: ${{ steps.meta.outputs.tags }}"
+          echo "Labels: ${{ steps.meta.outputs.labels }}"
 
       - name: Build and push Docker image
         id: build
