@@ -72,14 +72,15 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
 ENV PATH="/home/vscode/.local/bin:/home/vscode/.cargo/bin:${PATH}"
 
 # Layer 5: Core runtime installations via mise
-RUN eval "$($HOME/.local/bin/mise activate bash)" && \
-    $HOME/.local/bin/mise install python@3.12 && \
-    $HOME/.local/bin/mise install node@lts && \
-    $HOME/.local/bin/mise global python@3.12 node@lts
+RUN bash -c 'export PATH="/home/vscode/.local/bin:${PATH}" && \
+    ~/.local/bin/mise install python@3.12 && \
+    ~/.local/bin/mise install node@lts && \
+    ~/.local/bin/mise global python@3.12 node@lts'
 
 # Layer 6: Claude Code tool installation (requires Node.js)
-RUN eval "$($HOME/.local/bin/mise activate bash)" && \
-    npm install -g cc-sdd@latest
+RUN bash -c 'export PATH="/home/vscode/.local/bin:${PATH}" && \
+    eval "$(~/.local/bin/mise activate bash)" && \
+    npm install -g cc-sdd@latest'
 
 # Set working directory
 WORKDIR /workspaces
