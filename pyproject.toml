@@ -1,12 +1,12 @@
 [project]
 name = "genai"
 version = "0.1.0"
-description = "Modern GenAI development environment template"
+description = "Modern Agentic development environment template"
 readme = "README.md"
 license = { text = "MIT" }
-authors = [{ name = "GenAI Developer", email = "developer@example.com" }]
+authors = [{ name = "Agentic Developer" }]
 requires-python = ">=3.12"
-keywords = ["genai", "ai", "machine-learning", "template"]
+keywords = ["agentic", "ai", "machine-learning", "template"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
