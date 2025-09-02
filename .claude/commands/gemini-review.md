@@ -3,6 +3,7 @@
 Fetch and analyze Gemini Code Assistant's PR review comments, implement fixes if valid, and trigger re-review.
 
 - think harder!
+- use web search
 - use context7
 - use ultrathink
 - use sequential-thinking
