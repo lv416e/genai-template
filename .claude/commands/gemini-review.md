@@ -2,6 +2,13 @@
 
 Fetch and analyze Gemini Code Assistant's PR review comments, implement fixes if valid, and trigger re-review.
 
+- think harder!
+- use context7
+- use ultrathink
+- use sequential-thinking
+- use serena
+- use @modelcontextprotocol/server-memory
+
 ## Usage
 
 ```
