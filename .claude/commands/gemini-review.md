@@ -21,7 +21,7 @@ Find or create a PR from the current branch, retrieve Gemini Code Assistant's re
 
 - Current branch: !`git rev-parse --abbrev-ref HEAD`
 - Current git status: !`git status --porcelain`
-- Open PRs for current branch: !`gh pr list --head "$(git rev-parse --abbrev-ref HEAD)" --json number,title`
+- Open PRs for current branch: Use GitHub CLI to find PRs for the current branch
 
 ## Your task
 
