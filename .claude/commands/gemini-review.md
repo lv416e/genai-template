@@ -26,8 +26,16 @@ Find or create a PR from the current branch, retrieve Gemini Code Assistant's re
 ## Your task
 
 1. **Find the current PR** for this branch using GitHub CLI
-2. **Retrieve Gemini reviews** from the PR using GitHub API
-3. **Analyze review comments** for:
+2. **Retrieve Gemini reviews** from the PR using GitHub API and filter out resolved comments
+   - Filter comments with `**[RESOLVED]**` in the body text
+   - Only process unresolved review comments from gemini-code-assist[bot]
+3. **Analyze review comments** and categorize by priority:
+   - **CRITICAL** 🔴: Security vulnerabilities, runtime errors, data corruption
+   - **HIGH** 🟠: Performance issues, significant bugs, architectural problems
+   - **MEDIUM** 🟡: Code quality, testing gaps, maintainability issues
+   - **LOW** 🟢: Style preferences, minor optimizations, documentation
+
+   Categories:
    - Bug/Error Detection 🐛
    - Performance Suggestions ⚡
    - Security Concerns 🔒
@@ -35,9 +43,16 @@ Find or create a PR from the current branch, retrieve Gemini Code Assistant's re
    - Testing Recommendations 🧪
    - Documentation 📚
    - Best Practices ✨
-4. **Implement valid suggestions** by editing the relevant files
+4. **Implement suggestions in priority order** (CRITICAL → HIGH → MEDIUM → LOW)
 5. **Run tests** to ensure changes work correctly
-6. **Commit changes** with descriptive messages
-7. **Trigger Gemini re-review** by posting "/gemini review" comment
+6. **Commit and push changes** with descriptive messages
+7. **Mark comments as resolved** by updating comment body to include `**[RESOLVED]**` marker
+8. **Trigger Gemini re-review** by posting **only** "/gemini review" comment
 
-Focus on implementing fixes for HIGH and MEDIUM priority issues first. Use appropriate tools to make precise code changes.
+## Priority Implementation Strategy
+1. **CRITICAL** 🔴: Fix immediately, block all other work if necessary
+2. **HIGH** 🟠: Address before proceeding to lower priorities
+3. **MEDIUM** 🟡: Implement systematically after high-priority items
+4. **LOW** 🟢: Address if time permits, or create follow-up issues
+
+Use appropriate tools to make precise code changes. Group commits by priority level when possible.
