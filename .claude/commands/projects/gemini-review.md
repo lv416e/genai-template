@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(gh api:*), Bash(gh pr list:*), Bash(gh pr view:*), Bash(gh pr comment:*), Bash(git rev-parse:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*), Read, Write, Edit, Update
+allowed-tools: Bash(gh api:*), Bash(gh pr list:*), Bash(gh pr view:*), Bash(gh pr comment:*), Bash(gh pr create:*), Bash(gh repo view:*), Bash(git rev-parse:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*), Bash(git add:*), Read, Write, Edit, Update
 argument-hint: [optional-pr-number]
 description: Analyze Gemini Code Assistant's PR review comments and implement fixes
 ---
@@ -14,9 +14,11 @@ This is a critical workflow that requires careful execution of each step. I need
 
 ## Context Information
 
-- Current branch: !`git rev-parse --abbrev-ref HEAD`
-- Current git status: !`git status --porcelain`
-- Repository info: !`gh repo view --json owner,name`
+**First, gather current repository context:**
+
+1. Current branch: Execute `git rev-parse --abbrev-ref HEAD`
+2. Current git status: Execute `git status --porcelain`
+3. Repository info: Execute `gh repo view --json owner,name`
 
 ## MANDATORY EXECUTION STEPS
 
