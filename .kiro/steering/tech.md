@@ -15,7 +15,7 @@
 
 ### Runtime Management
 - **mise (v2024+)**: Unified runtime and tool manager
-  - Manages Python 3.12, Node.js LTS, Go 1.22, Rust 1.80
+  - Manages Python 3.12, Node.js LTS, Go 1.26, Rust 1.80
   - Environment variable management and task automation
   - Replaces pyenv, nvm, and other version managers
 
@@ -93,7 +93,7 @@ mkdocstrings>=0.27.0  # Python API documentation
 - **Purpose**: Frontend development, build tools, and JavaScript-based AI tools
 
 ### Go
-- **Go 1.22**: Modern Go version for backend services and CLI tools
+- **Go 1.26**: Modern Go version for backend services and CLI tools
 - **Purpose**: High-performance microservices and system tools
 
 ### Rust
