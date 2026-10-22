@@ -2,5 +2,5 @@
 # This file is compatible with both mise and asdf
 python 3.12
 nodejs lts
-golang 1.22
+golang 1.26
 rust 1.80
